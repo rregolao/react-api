@@ -1,0 +1,32 @@
+{
+  "family": "reactgram-api",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::441931764520:role/reactgramEcsExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "api",
+      "image": "441931764520.dkr.ecr.us-east-2.amazonaws.com/reactgram-api:v1",
+      "essential": true,
+      "portMappings": [{ "containerPort": 3000, "protocol": "tcp" }],
+      "command": ["sh", "-c", "npx prisma migrate deploy && node src/app.js"],
+      "environment": [{ "name": "PORT", "value": "3000" }],
+      "secrets": [
+        {
+          "name": "DATABASE_URL",
+          "valueFrom": "arn:aws:secretsmanager:us-east-2:441931764520:secret:reactgram/db-urtIFj:DATABASE_URL::"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/reactgram-api",
+          "awslogs-region": "us-east-2",
+          "awslogs-stream-prefix": "api"
+        }
+      }
+    }
+  ]
+}
