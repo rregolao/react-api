@@ -10,14 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Diagnóstico dos secrets
-        env:
-          AK: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          SK: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          echo "AWS_ACCESS_KEY_ID tamanho: ${#AK}"
-          echo "AWS_SECRET_ACCESS_KEY tamanho: ${#SK}"
-
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: us-east-2
